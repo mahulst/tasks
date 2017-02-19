@@ -1,0 +1,13 @@
+{
+  "extends": "airbnb",
+  "plugins": [
+    "flow-header"
+  ],
+  "rules": {
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "flow-header/flow-header": 2
+  },
+  "globals": {
+    "document": true
+  }
+}
