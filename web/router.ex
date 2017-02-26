@@ -11,6 +11,21 @@ defmodule Tasks.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+
+    plug Guardian.Plug.VerifyHeader
+    plug Guardian.Plug.LoadResource
+  end
+
+  scope "/api", Tasks do
+    pipe_through(:api)
+
+    scope "/v1" do
+      post "registrations", RegistrationController, :create
+      get "/current_user", CurrentUserController, :show
+
+      post "/sessions", SessionController, :create
+      delete "/sessions", SessionController, :delete
+    end
   end
 
   scope "/", Tasks do
