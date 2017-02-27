@@ -10,6 +10,10 @@ defmodule Tasks.User do
     field :encrypted_password, :string
     field :password, :string, virtual: true
 
+    has_many :owned_boards, Tasks.Board
+    has_many :user_boards, UserBoard
+    has_many :boards, through: [ :user_boards, :board ]
+
     timestamps()
   end
 

@@ -32,9 +32,7 @@ export default function configRoutes(store) {
 
       <Route path="/" component={AuthenticatedContainer} onEnter={_ensureAuthenticated}>
         <IndexRoute component={HomeIndexView} />
-        <Route path="/boards/:id" component={BoardsShowView}>
-          <Route path="cards/:id" component={CardsShowView}></Route>
-        </Route>
+        <Route path="/boards/:id" component={BoardsShowView}/>
       </Route>
     </Route>
   );
