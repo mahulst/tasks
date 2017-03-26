@@ -5,7 +5,7 @@ defmodule Tasks.CurrentUserController do
 
   def show(conn, _) do
     user = Guardian.Plug.current_resource(conn)
-
+    IO.inspect(user)
     conn
     |> put_status(:ok)
     |> render("show.json", user: user)

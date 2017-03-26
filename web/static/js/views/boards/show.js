@@ -5,7 +5,7 @@ import { connect }          from 'react-redux';
 import Actions              from '../../actions/current_board';
 import Constants            from '../../constants';
 import { setDocumentTitle } from '../../utils';
-
+import BoardMembers from '../../components/boards/members';
 
 class BoardsShowView extends React.Component {
   componentDidMount() {
@@ -18,6 +18,16 @@ class BoardsShowView extends React.Component {
     this.props.dispatch(Actions.connectToChannel(socket, this.props.params.id));
   }
 
+  componentWillUpdate(nextProps) {
+    const { socket } = this.props;
+
+    if (socket) {
+      return false;
+    }
+
+    this.props.dispatch(Actions.connectToChannel(nextProps.socket, this.props.params.id));
+  }
+
   componentWillUnmount() {
     this.props.dispatch(Actions.leaveChannel(this.props.currentBoard.channel));
   }
@@ -27,7 +37,7 @@ class BoardsShowView extends React.Component {
     const { dispatch } = this.props;
     const members = this.props.currentBoard.members;
     const currentUserIsOwner = this.props.currentBoard.user.id === this.props.currentUser.id;
-
+    debugger;
     return (
       <BoardMembers
         dispatch={dispatch}
@@ -59,7 +69,7 @@ class BoardsShowView extends React.Component {
         <div className="canvas-wrapper">
           <div className="canvas">
             <div className="lists-wrapper">
-              {::this._renderAddNewList()}
+              {/*{::this._renderAddNewList()}*/}
             </div>
           </div>
         </div>
@@ -68,10 +78,11 @@ class BoardsShowView extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state) => {
+  return ({
   currentBoard: state.currentBoard,
   socket: state.session.socket,
   currentUser: state.session.currentUser,
-});
+})};
 
 export default connect(mapStateToProps)(BoardsShowView);

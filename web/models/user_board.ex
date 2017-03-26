@@ -13,7 +13,7 @@ defmodule Tasks.UserBoard do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [])
+    |> cast(params, [ :user_id, :board_id ])
     |> unique_constraint(:user_id, name: :user_boards_user_id_board_id_index)
   end
 end

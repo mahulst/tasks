@@ -3,6 +3,28 @@ import Constants                          from '../constants';
 import { Socket }                         from 'phoenix';
 import { httpGet, httpPost, httpDelete }  from '../utils';
 
+export function setCurrentUser(dispatch, user) {
+  dispatch({
+    type: Constants.CURRENT_USER,
+    currentUser: user
+  });
+
+  const socket = new Socket('/socket', {
+    params: { token: localStorage.getItem('phoenixAuthToken') }
+  });
+
+  socket.connect();
+  const channel = socket.channel(`users:${user.id}`)
+
+  channel.join().receive('ok', () => {
+    dispatch({
+      type: Constants.SOCKET_CONNECTED,
+      socket: socket,
+      channel: channel
+    })
+  });
+};
+
 const Actions = {
   signIn: (email, password) => {
     return dispatch => {
@@ -16,6 +38,7 @@ const Actions = {
       httpPost('/api/v1/sessions', data)
         .then((data) => {
           localStorage.setItem('phoenixAuthToken', data.jwt);
+          setCurrentUser(dispatch, data.user);
           dispatch(push('/'));
         })
         .catch((error) => {
@@ -33,8 +56,10 @@ const Actions = {
   currentUser: () => {
     return dispatch => {
       const authToken = localStorage.getItem('phoenixAuthToken');
-
       httpGet('/api/v1/current_user')
+        .then(function (data) {
+          setCurrentUser(dispatch, data);
+        })
         .catch(function (error) {
           console.log(error);
           dispatch(push('/sign_in'));

@@ -6,11 +6,13 @@ defmodule Tasks.SessionController do
   def create(conn, %{ "session" => session_params }) do
     case Tasks.Session.authenticate(session_params) do
       {:ok, user} ->
-        { :ok, jwt, _full_claims } = user |> Guardian.encode_and_sign(:token)
+         new_conn = Guardian.Plug.api_sign_in(conn, user)
+         jwt = Guardian.Plug.current_token(new_conn)
+         claims = Guardian.Plug.claims(new_conn)
 
-        conn
-        |> put_status(:created)
-        |> render("show.json", jwt: jwt, user: user)
+         new_conn
+         |> put_resp_header("authorization", "TasksWebsite #{jwt}")
+         |> render("show.json", jwt: jwt, user: user)
 
       :error ->
         conn

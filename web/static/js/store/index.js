@@ -11,12 +11,18 @@ const loggerMiddleware = createLogger({
 });
 
 export default function configureStore(browserHistory: Object) {
-  const reduxRouterMiddleware = routerMiddleware(browserHistory);
-  const createStoreWithMiddleware = applyMiddleware(
-    reduxRouterMiddleware,
-    thunkMiddleware,
-    loggerMiddleware,
-  )(createStore);
 
-  return createStoreWithMiddleware(reducers);
+  const reduxRouterMiddleware = routerMiddleware(browserHistory);
+
+  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+  console.log(composeEnhancers)
+  const enhancer = composeEnhancers(
+      applyMiddleware(
+      reduxRouterMiddleware,
+      thunkMiddleware,
+      loggerMiddleware,
+    )
+  );
+
+  return createStore(reducers, enhancer);
 }

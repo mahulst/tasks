@@ -21,6 +21,9 @@ export default function reducer(state = initialState, action = {}) {
     case Constants.BOARDS_CREATE_ERROR:
       return { ...state, formErrors: action.errors };
 
+    case Constants.BOARDS_RESET:
+      return { ...state, showForm: false, formErrors: null, ownedFetched: false, fetching: false, };
+
     case Constants.BOARDS_NEW_BOARD_CREATED:
       const { ownedBoards } = state;
 

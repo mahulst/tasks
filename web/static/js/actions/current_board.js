@@ -5,7 +5,7 @@ const Actions = {
     return dispatch => {
       const channel = socket.channel(`boards:${boardId}`);
 
-      dispatch({ type: Constants.CURRENT_BOARD_FETHING });
+      dispatch({ type: Constants.CURRENT_BOARD_FETCHING });
 
       channel.join().receive('ok', (response) => {
         dispatch({
@@ -18,10 +18,47 @@ const Actions = {
           channel: channel,
         });
       });
+
+      channel.on('member:added', (msg) => {
+        dispatch({
+          type: Constants.CURRENT_BOARD_MEMBER_ADDED,
+          user: msg.user,
+        });
+      });
+
     };
   },
 
-  // ...
+  leaveChannel: (channel) => {
+    return dispatch => {
+      channel.leave();
+
+      dispatch({
+        type: Constants.CURRENT_BOARD_RESET,
+      });
+    };
+  },
+
+  showMembersForm: (show) => {
+    return dispatch => {
+      dispatch({
+        type: Constants.CURRENT_BOARD_SHOW_MEMBERS_FORM,
+        show: show,
+      });
+    };
+  },
+
+  addNewMember: (channel, email) => {
+    return dispatch => {
+      channel.push('members:add', { email: email })
+        .receive('error', (data) => {
+          dispatch({
+            type: Constants.CURRENT_BOARD_ADD_MEMBER_ERROR,
+            error: data.error,
+          });
+        });
+    };
+  },
 };
 
 export default Actions;

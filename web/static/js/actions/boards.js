@@ -1,5 +1,5 @@
 import Constants              from '../constants';
-import { routeActions }       from 'react-router-redux';
+import { push }           from 'react-router-redux';
 import { httpGet, httpPost }  from '../utils';
 
 const Actions = {
@@ -35,17 +35,29 @@ const Actions = {
             board: data,
           });
 
-          dispatch(routeActions.push(`/boards/${data.id}`));
+          dispatch(push(`/boards/${data.id}`));
         })
         .catch((error) => {
-          error.response.json()
-            .then((json) => {
-              dispatch({
-                type: Constants.BOARDS_CREATE_ERROR,
-                errors: json.errors,
+          if(error.repsonse) {
+            error.response.json()
+              .then((json) => {
+                dispatch({
+                  type: Constants.BOARDS_CREATE_ERROR,
+                  errors: json.errors,
+                });
               });
-            });
+          } else {
+            throw error;
+          }
         });
+    };
+  },
+
+  reset: () => {
+    return dispatch => {
+      dispatch({
+        type: Constants.BOARDS_RESET,
+      });
     };
   },
 };

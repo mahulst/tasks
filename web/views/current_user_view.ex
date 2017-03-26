@@ -1,7 +1,7 @@
 defmodule Tasks.CurrentUserView do
   use Tasks.Web, :view
 
-  def render("show.json", %{user: user }) do
+  def render("show.json", %{ user: user }) do
     user
   end
 
