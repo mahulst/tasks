@@ -29,7 +29,7 @@ defmodule Tasks.Board do
 #    cards_query = from c in Card, order_by: c.position, preload: [[comments: ^comments_query], :members]
 #    lists_query = from l in List, order_by: l.position, preload: [cards: ^cards_query]
 
-    from b in query, preload: [:user]
+    from b in query, preload: [:user, :members]
   end
 
 end

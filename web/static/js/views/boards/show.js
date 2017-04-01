@@ -37,7 +37,6 @@ class BoardsShowView extends React.Component {
     const { dispatch } = this.props;
     const members = this.props.currentBoard.members;
     const currentUserIsOwner = this.props.currentBoard.user.id === this.props.currentUser.id;
-    debugger;
     return (
       <BoardMembers
         dispatch={dispatch}

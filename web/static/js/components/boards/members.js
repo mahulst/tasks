@@ -36,7 +36,7 @@ export default class BoardMembers extends React.Component {
             <form onSubmit={::this._handleSubmit}>
               <h4>Add new members</h4>
               {::this._renderError()}
-              <input ref="email" type="email" required={true} placeholder="Member email"/>
+              <input ref="email" type="email" required={true} value="michel2@test.nl" placeholder="Member email"/>
               <button type="submit">Add member</button> or <a onClick={::this._handleCancelClick} href="#">cancel</a>
             </form>
           </li>

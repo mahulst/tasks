@@ -17,6 +17,21 @@ alias Tasks.{ Repo, User }
         last_name: "Doe",
         email: "john@tasks.com",
         password: "12341234"
+    }, %{
+        first_name: "Michel",
+        last_name: "De tweede",
+        email: "michel@test.nl",
+        password: "12341234"
+    }, %{
+        first_name: "Michel",
+        last_name: "de Derde",
+        email: "michel2@test.nl",
+        password: "12341234"
+    }, %{
+        first_name: "Michel",
+        last_name: "De Vierde",
+        email: "michel4@test.nl",
+        password: "12341234"
     },
 ]
 |>  Enum.map(&User.changeset(%User{}, &1))

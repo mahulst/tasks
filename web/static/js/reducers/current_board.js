@@ -4,7 +4,8 @@ const initialState = {
   channel: null,
   fetching: true,
   showUsersForm: false,
-  error: false
+  error: false,
+  members: []
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -20,6 +21,9 @@ export default function reducer(state = initialState, action = {}) {
 
     case Constants.CURRENT_BOARD_SHOW_MEMBERS_FORM:
       return { ...state, showUsersForm: action.show, error: false };
+
+    case Constants.CURRENT_BOARD_MEMBER_ADDED:
+      return { ...state, members: [...state.members, action.user]};
 
     default:
       return state;

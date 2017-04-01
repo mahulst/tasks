@@ -1,5 +1,5 @@
 /* @flow */
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import { routerMiddleware } from 'react-router-redux';
 import createLogger from 'redux-logger';
 import thunkMiddleware from 'redux-thunk';
@@ -15,7 +15,6 @@ export default function configureStore(browserHistory: Object) {
   const reduxRouterMiddleware = routerMiddleware(browserHistory);
 
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-  console.log(composeEnhancers)
   const enhancer = composeEnhancers(
       applyMiddleware(
       reduxRouterMiddleware,
