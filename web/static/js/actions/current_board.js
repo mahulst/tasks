@@ -26,6 +26,43 @@ const Actions = {
         });
       });
 
+      channel.on('card:created', (msg) => {
+        dispatch({
+          type: Constants.CURRENT_BOARD_CARD_CREATED,
+          card: msg.card,
+        });
+      });
+
+      channel.on('card:updated', (msg) => {
+        dispatch({
+          type: Constants.BOARDS_SET_CURRENT_BOARD,
+          board: msg.board,
+        });
+
+        dispatch({
+          type: Constants.CURRENT_CARD_SET,
+          card: msg.card,
+        });
+      });
+
+      channel.on('list:updated', (msg) => {
+        dispatch({
+          type: Constants.BOARDS_SET_CURRENT_BOARD,
+          board: msg.board,
+        });
+      });
+    };
+  },
+
+  updateCard: (channel, card) => {
+    return dispatch => {
+      channel.push('card:update', { card: card });
+    };
+  },
+
+  updateList: (channel, list) => {
+    return dispatch => {
+      channel.push('list:update', { list: list });
     };
   },
 
@@ -57,6 +94,24 @@ const Actions = {
             error: data.error,
           });
         });
+    };
+  },
+
+  showForm: (show) => {
+    return dispatch => {
+      dispatch({
+        type: Constants.CURRENT_BOARD_SHOW_FORM,
+        show: show,
+      });
+    };
+  },
+
+  showCardForm: (listId) => {
+    return dispatch => {
+      dispatch({
+        type: Constants.CURRENT_BOARD_SHOW_CARD_FORM_FOR_LIST,
+        listId: listId
+      });
     };
   },
 };

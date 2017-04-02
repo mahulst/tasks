@@ -2,13 +2,17 @@ defmodule Tasks.Board do
   use Tasks.Web, :model
   alias __MODULE__
 
-  @derive {Poison.Encoder, only: [:id, :name, :user, :members]}
+  alias Tasks.{Card, List, User, UserBoard}
+
+  @derive {Poison.Encoder, only: [:id, :name, :user, :members, :lists]}
 
   schema "boards" do
     field :name, :string
-    belongs_to :user, Tasks.User
+    belongs_to :user, User
 
-    has_many :user_boards, Tasks.UserBoard
+    has_many :lists, List
+    has_many :cards, through: [:lists, :cards]
+    has_many :user_boards, UserBoard
     has_many :members, through: [:user_boards, :user]
 
     timestamps()
@@ -26,10 +30,11 @@ defmodule Tasks.Board do
 
   def preload_all(query) do
 #    comments_query = from c in Comment, order_by: [desc: c.inserted_at], preload: :user
-#    cards_query = from c in Card, order_by: c.position, preload: [[comments: ^comments_query], :members]
-#    lists_query = from l in List, order_by: l.position, preload: [cards: ^cards_query]
+       IO.inspect('!!!!')
+    cards_query = from c in Card
+    lists_query = from l in List, preload: [cards: ^cards_query]
 
-    from b in query, preload: [:user, :members]
+    from b in query, preload: [:user, :members, lists: ^lists_query]
   end
 
 end

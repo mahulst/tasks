@@ -3,9 +3,11 @@ import Constants  from '../constants';
 const initialState = {
   channel: null,
   fetching: true,
+  showForm: false,
   showUsersForm: false,
   error: false,
-  members: []
+  members: [],
+  addingNewCardInListId: null
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -25,6 +27,20 @@ export default function reducer(state = initialState, action = {}) {
     case Constants.CURRENT_BOARD_MEMBER_ADDED:
       return { ...state, members: [...state.members, action.user]};
 
+    case Constants.CURRENT_BOARD_SHOW_FORM:
+      return { ...state, showForm: action.show};
+
+    case Constants.CURRENT_BOARD_SHOW_CARD_FORM_FOR_LIST:
+      return { ...state, addingNewCardInListId: action.listId };
+
+    case Constants.CURRENT_BOARD_CARD_CREATED:
+      let lists = state.lists;
+      const { card } = action;
+
+      const listIndex = lists.findIndex((list) => { return list.id === card.list_id; });
+      lists[listIndex].cards.push(card);
+
+      return { ...state, lists: lists };
     default:
       return state;
   }
